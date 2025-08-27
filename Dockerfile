@@ -44,6 +44,7 @@ RUN chown -R www-data:www-data /var/www/html \
     && mkdir -p /var/www/html/runtime/log \
     && mkdir -p /var/www/html/runtime/cache \
     && mkdir -p /var/www/html/runtime/temp \
+    && chown -R www-data:www-data /var/www/html/runtime \
     && chmod -R 777 /var/www/html/runtime \
     && chmod -R 777 /var/www/html/public/qr-code \
     && if [ -f /var/www/html/public/qr-code/test.php ]; then chmod 777 /var/www/html/public/qr-code/test.php; fi \
