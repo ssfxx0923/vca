@@ -40,9 +40,13 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-plugin
 # 设置权限
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
+    && mkdir -p /var/www/html/runtime \
+    && mkdir -p /var/www/html/runtime/log \
+    && mkdir -p /var/www/html/runtime/cache \
+    && mkdir -p /var/www/html/runtime/temp \
     && chmod -R 777 /var/www/html/runtime \
     && chmod -R 777 /var/www/html/public/qr-code \
-    && chmod 777 /var/www/html/public/qr-code/test.php
+    && if [ -f /var/www/html/public/qr-code/test.php ]; then chmod 777 /var/www/html/public/qr-code/test.php; fi
 
 # 复制配置文件
 COPY docker/nginx.conf /etc/nginx/nginx.conf
