@@ -116,7 +116,7 @@ sleep 10
 
 # 健康检查
 echo "🏥 进行健康检查..."
-if curl -f http://localhost/health > /dev/null 2>&1; then
+if curl -f http://localhost:8080/health > /dev/null 2>&1; then
     echo "✅ 应用启动成功！"
 else
     echo "⚠️  应用可能还在启动中，请稍后检查"
@@ -125,8 +125,8 @@ fi
 echo ""
 echo "🎉 部署完成！"
 echo "================================"
-echo "📱 应用访问地址: http://localhost"
-echo "🗄️  数据库管理: http://localhost:8080"
+echo "📱 应用访问地址: http://localhost:8080"
+echo "🗄️  数据库管理: http://localhost:8081"
 echo "📋 默认账号: admin"
 echo "🔑 默认密码: admin"
 echo ""
