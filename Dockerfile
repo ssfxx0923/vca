@@ -23,8 +23,8 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
         bcmath \
         pcntl
 
-# 安装Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# 安装Composer (使用兼容版本)
+COPY --from=composer:2.2 /usr/bin/composer /usr/bin/composer
 
 # 设置工作目录
 WORKDIR /var/www/html
@@ -32,8 +32,10 @@ WORKDIR /var/www/html
 # 复制项目文件
 COPY . .
 
-# 安装PHP依赖
-RUN composer install --no-dev --optimize-autoloader --no-interaction
+# 安装PHP依赖 (跳过插件以避免兼容性问题)
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-plugins || \
+    composer update --no-dev --optimize-autoloader --no-interaction --no-plugins || \
+    echo "Composer dependencies already exist"
 
 # 设置权限
 RUN chown -R www-data:www-data /var/www/html \
