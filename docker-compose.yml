@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # PHP应用服务
+  app:
+    build: .
+    container_name: vmq-app
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - app_storage:/var/www/html/runtime
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=vmq
+      - DB_USERNAME=vmq_user
+      - DB_PASSWORD=vmq_password123
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - vmq-network
+
+  # MySQL数据库服务
+  mysql:
+    image: mysql:5.7
+    container_name: vmq-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password123
+      MYSQL_DATABASE: vmq
+      MYSQL_USER: vmq_user
+      MYSQL_PASSWORD: vmq_password123
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./vmq.sql:/docker-entrypoint-initdb.d/vmq.sql
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - vmq-network
+
+  # Redis缓存服务（可选）
+  redis:
+    image: redis:6-alpine
+    container_name: vmq-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - vmq-network
+
+  # PHPMyAdmin管理界面（可选）
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: vmq-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: vmq_user
+      PMA_PASSWORD: vmq_password123
+    depends_on:
+      - mysql
+    networks:
+      - vmq-network
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+  app_storage:
+    driver: local
+
+networks:
+  vmq-network:
+    driver: bridge

@@ -1,0 +1,50 @@
+# Git相关
+.git
+.gitignore
+
+# 文档
+*.md
+docs/
+
+# 日志文件
+*.log
+logs/
+
+# 临时文件
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# IDE文件
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 缓存目录
+runtime/log/
+runtime/cache/
+runtime/temp/
+
+# 构建文件
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# 环境文件
+.env
+.env.*
+
+# 测试文件
+tests/
+test/
+
+# 备份文件
+*.bak
+*.backup
+backup_*
+
+# Docker相关
+Dockerfile.*
+docker-compose.*.yml
