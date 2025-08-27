@@ -40,7 +40,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./vmq.sql:/docker-entrypoint-initdb.d/vmq.sql
-    command: --default-authentication-plugin=mysql_native_password
+    command: --default-authentication-plugin=mysql_native_password --innodb-buffer-pool-size=64M --innodb-log-file-size=32M --max-connections=50
     networks:
       - vmq-network
 

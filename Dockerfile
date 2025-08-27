@@ -37,7 +37,7 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction --no-plugin
     composer update --no-dev --optimize-autoloader --no-interaction --no-plugins || \
     echo "Composer dependencies already exist"
 
-# 设置权限
+# 设置权限和创建必要目录
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html \
     && mkdir -p /var/www/html/runtime \
@@ -46,7 +46,9 @@ RUN chown -R www-data:www-data /var/www/html \
     && mkdir -p /var/www/html/runtime/temp \
     && chmod -R 777 /var/www/html/runtime \
     && chmod -R 777 /var/www/html/public/qr-code \
-    && if [ -f /var/www/html/public/qr-code/test.php ]; then chmod 777 /var/www/html/public/qr-code/test.php; fi
+    && if [ -f /var/www/html/public/qr-code/test.php ]; then chmod 777 /var/www/html/public/qr-code/test.php; fi \
+    && mkdir -p /var/log/supervisor \
+    && mkdir -p /var/run
 
 # 复制配置文件
 COPY docker/nginx.conf /etc/nginx/nginx.conf
